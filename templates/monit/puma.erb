@@ -1,0 +1,3 @@
+check process puma with pidfile /app/puma.pid
+  start program = "/bin/su - user -c 'cd /your_project/current && bundle exec puma -q -d -e production -C ./config/puma/production.rb'"
+  stop program =  "/bin/su - user -c 'kill `cat /your_directory/puma.pid`'"

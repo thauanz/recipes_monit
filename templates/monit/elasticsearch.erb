@@ -1,0 +1,26 @@
+# https://gist.github.com/karmi/910301
+
+check system localhost
+  if loadavg (5min) > 10 then alert
+  if memory usage > 80% then alert
+  if cpu usage (user) > 90% then alert
+
+check filesystem data with path /var
+  if space usage > 80% for 5 times within 15 cycles then alert
+  if inode usage > 90% then alert
+  if space usage > 99% then stop
+  if inode usage > 99% then stop
+  group filesystem
+
+check host "your_host" with address your_ip_adress
+  if failed url http://127.0.0.1:9200/ with timeout 15 seconds then alert
+  group elasticsearch
+
+check process elasticsearch1 with pidfile /etc/elasticsearch/bin/service/elasticsearch.pid
+  start program = "/usr/bin/sudo service elasticsearch start" with timeout 60 seconds
+  stop program = "/usr/bin/sudo service elasticsearch stop" with timeout 60 seconds
+  if cpu > 90% for 5 cycles then restart
+  if totalmem > 2 GB for 5 cycles then restart
+  if loadavg(5min) greater than 10 for 8 cycles then stop
+  if 3 restarts within 5 cycles then timeout
+  group elasticsearch
